@@ -22,4 +22,11 @@
 
     <!-- 리소스 추가 -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <!-- OSVI 사용 -->
+    <mvc:interceptors>
+        <bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
+            <property name="entityManagerFactory" ref="entityManagerFactory" />
+        </bean>
+    </mvc:interceptors>
 </beans>
