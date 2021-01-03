@@ -36,6 +36,9 @@
             </tbody>
         </table>
     </div>
+
+    <jsp:include page="../fragments/footer.jsp" />
+    
 </div> <!-- container -->
 
 </body>
