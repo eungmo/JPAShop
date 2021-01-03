@@ -19,16 +19,6 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    // 상품 목록
-    @RequestMapping(value= "/items", method = RequestMethod.GET)
-    public String list(Model model) {
-
-        List<Item> items = itemService.findItems();
-        model.addAttribute("items", items);
-        return "items/itemList";
-    }
-
-
     // 상품 생성 폼
     @RequestMapping(value = "/items/new", method = RequestMethod.GET)
     public String createForm() {
@@ -41,6 +31,15 @@ public class ItemController {
 
         itemService.saveItem(item);
         return "redirect:/items";
+    }
+
+    // 상품 목록
+    @RequestMapping(value= "/items", method = RequestMethod.GET)
+    public String list(Model model) {
+
+        List<Item> items = itemService.findItems();
+        model.addAttribute("items", items);
+        return "items/itemList";
     }
 
     // 상품 수정 폼
