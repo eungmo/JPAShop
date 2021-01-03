@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 스프링 프레임워크가 제공하는 애노테이션 기반의 트랜잭션 관리자를 활성화 __> @Transactional이 붙은 곳에 트랜잭션을 적용한다. -->
+    <tx:annotation-driven/>
+
+    <context:component-scan base-package="jpabook.jpashop.service, jpabook.jpashop.repository"/>
+
+    <bean id="dataSource"
+          class="org.apache.tomcat.jdbc.pool.DataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:jpashop"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <!-- 트랜잭션 관리자를 등록한다 -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- @Repository가 붙어있는 스프링 빈에 예외 변환 AOP를 적용한다 -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- @Entity 탐색 시작 위치 -->
+        <property name="packagesToScan" value="jpabook.jpashop.domain"/>
+        <property name="jpaVendorAdapter">
+            <!-- 하이버네이트 구현체 사용 -->
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties"> <!-- 하이버네이트 상세 설정 -->
+            <props>
+                <!-- 방언 -->
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.H2Dialect
+                </prop>
+                <!-- SQL 보기 -->
+                <prop key="hibernate.show_sql">true</prop>
+                <!-- SQL 정렬해서 보기 -->
+                <prop key="hibernate.format_sql">true</prop>
+                <!-- SQL 코멘트 보기 -->
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <!-- 새 버전의 ID생성 옵션 -->
+                <prop key="hibernate.id.new_generaor_mappings">true</prop>
+                <!-- DLL 자동 생성 -->
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+            </props>
+
+        </property>
+    </bean>
+
+
+
+</beans>
